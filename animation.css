@@ -1,0 +1,20 @@
+/*css animation寫法
+@keyframes 動畫名稱
+*/
+@keyframes et-animation {
+  0% {
+    padding: 100px;
+    opacity: 1;
+
+  }
+  100% {
+    padding: 10px;
+     opacity: 0;
+  }
+}
+img {
+    /*要引用的動畫名稱+動畫總時長*/
+  animation: et-animation;
+  animation-duration:2s;
+
+}
