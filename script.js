@@ -1,96 +1,78 @@
+// 星球按鈕交互功能
 document.addEventListener('DOMContentLoaded', function() {
-    const emotionButtons = document.querySelectorAll('.emotion-btn');
-    let activeEmotion = null;
+    const planetBtn = document.getElementById('planet-btn');
     
-    console.log('情緒按鈕初始化，找到按鈕:', emotionButtons.length);
-
-    // === 提示語輪播功能 ===
-    const tipMessages = document.querySelectorAll('.tip-message');
-    let currentTipIndex = 0;
-    const tipInterval = 3000; // 3秒切換
-
-    function startTipsRotation() {
-        // 先隱藏所有提示語
-        tipMessages.forEach(tip => tip.classList.remove('active'));
-        
-        // 顯示第一個提示語
-        if (tipMessages.length > 0) {
-            tipMessages[currentTipIndex].classList.add('active');
+    // 是否處於 active 狀態
+    let isActive = false;
+    
+    // 點擊事件：切換到 active 狀態（進入分頁）
+    planetBtn.addEventListener('click', function() {
+        if (!isActive) {
+            // 切換到 active 狀態
+            isActive = true;
+            this.classList.add('active');
+            
+            // 移除 hover 效果相關監聽
+            this.classList.add('no-transition');
+            
+            // 模擬進入分頁後的跳轉（可替換為實際連結）
+            setTimeout(() => {
+                // 這裡可以替換為實際的頁面跳轉
+                window.location.href = './other page/0.1_info/index.html';
+                
+                // 或者顯示訊息
+                console.log('進入星球分頁！');
+                
+                // 可選：3秒後恢復到 default 狀態
+                // setTimeout(() => {
+                //     this.classList.remove('active');
+                //     this.classList.remove('no-transition');
+                //     isActive = false;
+                // }, 3000);
+            }, 800); // 等待動畫結束
         }
-        
-        // 設定輪播間隔
-        setInterval(() => {
-            // 隱藏當前提示語
-            tipMessages[currentTipIndex].classList.remove('active');
-            
-            // 計算下一個提示語索引
-            currentTipIndex = (currentTipIndex + 1) % tipMessages.length;
-            
-            // 顯示下一個提示語
-            tipMessages[currentTipIndex].classList.add('active');
-        }, tipInterval);
-    }
-
-    // === 原有的情緒按鈕功能 ===
-    
-    // 初始化所有按鈕為 default 狀態
-    function initializeButtons() {
-        emotionButtons.forEach(btn => {
-            btn.classList.remove('active', 'disable', 'hover');
-        });
-    }
-    
-    // 處理情緒按鈕點擊
-    emotionButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const emotion = this.dataset.emotion;
-            console.log('點擊按鈕:', emotion);
-            
-            // 如果點擊的是當前已激活的按鈕，則恢復初始狀態
-            if (activeEmotion === emotion) {
-                resetToDefault();
-                activeEmotion = null;
-            } else {
-                // 設置新的激活狀態
-                setActiveEmotion(emotion);
-                activeEmotion = emotion;
-            }
-        });
-        
-        // 滑鼠移入效果
-        button.addEventListener('mouseenter', function() {
-            if (!this.classList.contains('active') && !this.classList.contains('disable')) {
-                this.classList.add('hover');
-            }
-        });
-        
-        // 滑鼠移出效果
-        button.addEventListener('mouseleave', function() {
-            this.classList.remove('hover');
-        });
     });
     
-    // 設置激活的情緒
-    function setActiveEmotion(emotion) {
-        emotionButtons.forEach(btn => {
-            if (btn.dataset.emotion === emotion) {
-                btn.classList.add('active');
-                btn.classList.remove('disable', 'hover');
-            } else {
-                btn.classList.add('disable');
-                btn.classList.remove('active', 'hover');
-            }
-        });
-    }
+    // 添加 hover 效果增強
+    planetBtn.addEventListener('mouseenter', function() {
+        if (!isActive) {
+            // 懸停時添加一些額外效果
+            this.style.transition = 'all 0.3s ease';
+        }
+    });
     
-    // 重置所有按鈕為 default 狀態
-    function resetToDefault() {
-        emotionButtons.forEach(btn => {
-            btn.classList.remove('active', 'disable', 'hover');
-        });
-    }
+    planetBtn.addEventListener('mouseleave', function() {
+        if (!isActive) {
+            // 滑鼠離開時恢復
+            this.style.transition = 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        }
+    });
     
-    // === 初始化所有功能 ===
-    initializeButtons();
-    startTipsRotation(); // 啟動提示語輪播
+    // 鍵盤快捷鍵：A 鍵觸發 active 狀態
+    document.addEventListener('keydown', function(e) {
+        if ((e.key === 'a' || e.key === 'A') && !isActive) {
+            planetBtn.click(); // 模擬點擊
+        }
+        
+        // R 鍵重置狀態（如果允許）
+        if ((e.key === 'r' || e.key === 'R') && isActive) {
+            planetBtn.classList.remove('active');
+            planetBtn.classList.remove('no-transition');
+            isActive = false;
+        }
+    });
+    
+    // 觸控設備優化
+    planetBtn.addEventListener('touchstart', function(e) {
+        if (!isActive) {
+            // 觸摸時立即觸發 hover 效果
+            this.classList.add('touch-hover');
+        }
+        e.preventDefault();
+    }, { passive: false });
+    
+    planetBtn.addEventListener('touchend', function(e) {
+        this.classList.remove('touch-hover');
+        e.preventDefault();
+    }, { passive: false });
 });
