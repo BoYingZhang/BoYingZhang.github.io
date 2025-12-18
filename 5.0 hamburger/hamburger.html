@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>漢堡組合頁</title>
+    <link rel="stylesheet" href="css/hamburger.css">
+</head>
+<body>
+    <div class="burger-container">
+        <!-- 背景圖 -->
+        <img src="./img/background/background.png" class="background-img" alt="背景">
+        
+        <!-- 漢堡食材 (依疊放順序由下到上：Bread2在最底層，Bread1在最上層) -->
+        <img src="./img/ingredients/bread2.png" class="ingredient bread-bottom" alt="底層麵包">
+        <img src="./img/ingredients/meat.png" class="ingredient meat" alt="肉排">
+        <img src="./img/ingredients/lettuce.png" class="ingredient lettuce" alt="生菜">
+        <img src="./img/ingredients/tomato.png" class="ingredient tomato" alt="番茄">
+        <img src="./img/ingredients/sauce.png" class="ingredient sauce" alt="醬料">
+        <img src="./img/ingredients/bread1.png" class="ingredient bread-top" alt="上層麵包">
+
+        <!-- 對話框 -->
+        <img src="./img/dialogue/dialogue_1.png" class="dialogue dialogue-1" alt="對話框1">
+        <img src="./img/dialogue/dialogue_2.png" class="dialogue dialogue-2" alt="對話框2">
+
+        <!-- 在對話框代碼後面，但在 </div> 之前加入下一步按鈕 -->
+        <button class="next-btn" id="nextButton" disabled>
+            <img src="../3.0 side dish/img/button/next/btn_next_default.png" alt="下一步" class="default-state">
+            <img src="../3.0 side dish/img/button/next/btn_next_hover.png" alt="下一步" class="hover-state">
+            <img src="../3.0 side dish/img/button/next/btn_next_active.png" alt="下一步" class="active-state">
+            <img src="../3.0 side dish/img/button/next/btn_next_disable.png" alt="下一步" class="disable-state">
+       </button>
+    </div>
+    
+    <script src="js/hamburger.js"></script>
+</body>
+</html>

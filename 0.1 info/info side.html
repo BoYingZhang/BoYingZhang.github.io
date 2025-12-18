@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>副菜營養資訊</title>
+    <link rel="stylesheet" href="css/info main:side.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@200..900&display=swap" rel="stylesheet">
+</head>
+<body class="side-dish-page">
+    <!-- 背景 -->
+    <div class="background"></div>
+    
+    <!-- 返回按鈕 -->
+    <div class="back-btn-container">
+        <a href="info.html" class="back-btn-link">
+            <img src="./img/button/back/btn_back_default.png" 
+                 alt="返回按鈕" 
+                 class="back-btn-image"
+                 id="back-btn">
+        </a>
+    </div>
+    
+    <!-- 內容容器 -->
+    <div class="container">
+        <!-- 頁面標題（遮罩外部） -->
+        <h1 class="page-title"></h1>
+        
+        <!-- 遮罩容器 -->
+        <div class="mask-container">
+            
+            <!-- 可滾動內容區域 -->
+            <div class="scrollable-content">
+                <!-- 導航區域 -->
+                <div class="navigation">
+                    <button class="nav-btn prev-btn" id="prev-btn">‹</button>
+                    <div class="current-emotion">
+                        <div class="emotion-image">
+                            <img id="emotion-img" src="./img/button/main:side/btn_main.png" alt="情緒圖片">
+                        </div>
+                        <h2 id="emotion-name" class="emotion-name">平靜火腿</h2>
+                    </div>
+                    <button class="nav-btn next-btn" id="next-btn">›</button>
+                </div>
+                
+                <!-- 營養資訊卡片 -->
+                <div class="info-card">
+                    <div class="info-section">
+                        <h4>正向營養成分</h4>
+                        <p id="nutrition-content" class="info-content">載入中...</p>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h4>潛在健康風險</h4>
+                        <p id="risk-content" class="info-content">載入中...</p>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h4>角色故事簡介</h4>
+                        <p id="story-content" class="info-content">載入中...</p>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h4>建議攝取</h4>
+                        <p id="suggestion-content" class="info-content">載入中...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/info side.js"></script>
+</body>
+</html>
