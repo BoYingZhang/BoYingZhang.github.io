@@ -79,6 +79,6 @@ if (homeBtn) {
 
   homeBtn.addEventListener("mouseup", () => {
     homeBtn.src = homeBtn.dataset.default;
-    window.location.href = "../0.0 homepage/homepage.html"; // 回首頁
+    window.location.href = "../homepage.html"; // 回首頁
   });
 }
