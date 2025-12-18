@@ -1,0 +1,261 @@
+/* =========================================
+   0. 全局設定與重置
+   ========================================= */
+html {
+    font-size: 16px; 
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* 防止滾動條 */
+    width: 100vw;
+    height: 100vh;
+    /* 新增：Flex 居中佈局，背景色 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: none; 
+}
+
+/* =========================================
+   0.1 遊戲容器 (新增)
+   ========================================= */
+.game-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* 核心：保持 16:9 比例 (可根據背景圖實際比例調整) */
+    aspect-ratio: 16/9; 
+    
+    /* 限制最大寬高，使其不超過屏幕 */
+    max-width: 100vw;
+    max-height: 100vh;
+    
+    /* 確保容器在屏幕內居中 */
+    margin: auto;
+    overflow: hidden;
+}
+
+/* 針對太寬的屏幕 (比 16:9 寬) */
+@media (min-aspect-ratio: 16/9) {
+    .game-wrapper {
+        width: auto;
+        height: 100vh;
+    }
+}
+
+/* 針對太高的屏幕 (比 16:9 高) */
+@media (max-aspect-ratio: 16/9) {
+    .game-wrapper {
+        width: 100vw;
+        height: auto;
+    }
+}
+
+/* =========================================
+   1. 背景圖
+   ========================================= */
+.background {
+    position: absolute; /* 改為 absolute */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../../assets/images/IMG_background.PNG');
+    background-repeat: no-repeat;
+    background-size: cover; /* 填滿容器，保持比例 */
+    background-position: center;
+    z-index: -10;
+    /* 確保背景圖片不會變形 */
+    image-rendering: -webkit-optimize-contrast;
+}
+
+/* =========================================
+   2. 對話框 (提示)
+   ========================================= */
+.dialogue-container {
+    position: absolute; /* 改為 absolute */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; 
+    z-index: 20;
+}
+
+.dialogue {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* 使用 % 單位 (相對於容器) */
+    width: 70%; 
+    max-width: 90%;
+    height: auto;
+    /* 保持圖片原始寬高比 */
+    aspect-ratio: auto;
+    object-fit: contain;
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+}
+
+.dialogue.show {
+    opacity: 1;
+}
+
+/* =========================================
+   3. 主選單網格佈局 (6個食物)
+   ========================================= */
+.main-emotion-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* 使用 % 單位 */
+    gap: 0% 0%; 
+    
+    position: absolute;
+    /* 使用 % 單位，調整為大約 40% */
+    bottom: 35%; 
+    left: 50%;
+    transform: translateX(-50%); 
+    
+    /* 使用 % 單位 */
+    width: 52%; 
+    max-width: 95%; 
+    height: auto;
+    z-index: 10;
+    
+    margin: 0;
+    padding: 0;
+}
+
+.emotion-option {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.emotion-option input[type="radio"] {
+    display: none;
+}
+
+.emotion-option label {
+    display: block;
+    width: 100%; 
+    /* 使用 % 單位 */
+    max-width: 100%; 
+    /* aspect-ratio: 1/1;  原為正方形，導致高度過高 */
+    aspect-ratio: 1.3/1; /* 修改此處：數字越大越扁，高度越小。試試 1.2/1 或 1.5/1 來減少上下間距 */
+    height: auto;
+    
+    cursor: pointer;
+    background-size: contain; /* 保持圖片比例，不裁切 */
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.2s;
+    /* 確保背景圖片不會變形 */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* 懸停效果 */
+.emotion-option label:hover {
+    transform: scale(1.08);
+}
+
+/* =========================================
+   4. 情緒圖片狀態管理 (保持不變)
+   ========================================= */
+/* 預設圖片 */
+.angry_defalt    { background-image: url(../../assets/images/btn_angry_defalt.PNG); }
+.anxiety_defalt  { background-image: url(../../assets/images/btn_anxiety_defalt.PNG); }
+.calm_defalt     { background-image: url(../../assets/images/btn_calm_defalt.PNG); }
+.joy_defalt      { background-image: url(../../assets/images/btn_joy_defalt.PNG); }
+.pressure_defalt { background-image: url(../../assets/images/btn_pressure_defalt.PNG); }
+.sad_defalt      { background-image: url(../../assets/images/btn_sad_defalt.PNG); }
+
+/* 懸停圖片 */
+.angry_defalt:hover    { background-image: url(../../assets/images/btn_angry_hover.png); }
+.anxiety_defalt:hover  { background-image: url(../../assets/images/btn_anxiety_hover.png); }
+.calm_defalt:hover     { background-image: url(../../assets/images/btn_calm_hover.png); }
+.joy_defalt:hover      { background-image: url(../../assets/images/btn_joy_hover.png); }
+.pressure_defalt:hover { background-image: url(../../assets/images/btn_pressure_hover.png); }
+.sad_defalt:hover      { background-image: url(../../assets/images/btn_sad_hover.png); }
+
+/* 已選擇狀態 */
+.main-emotion-grid.is-selected label {
+    cursor: default;
+    transform: none;
+}
+
+/* 未選中變暗 */
+.main-emotion-grid.is-selected input[type="radio"]:not(:checked) + label.angry_defalt    { background-image: url('../../assets/images/btn_angry_disable.png'); }
+.main-emotion-grid.is-selected input[type="radio"]:not(:checked) + label.anxiety_defalt  { background-image: url('../../assets/images/btn_anxiety_disable.png'); }
+.main-emotion-grid.is-selected input[type="radio"]:not(:checked) + label.calm_defalt     { background-image: url('../../assets/images/btn_calm_disable.png'); }
+.main-emotion-grid.is-selected input[type="radio"]:not(:checked) + label.joy_defalt      { background-image: url('../../assets/images/btn_joy_disable.png'); }
+.main-emotion-grid.is-selected input[type="radio"]:not(:checked) + label.pressure_defalt { background-image: url('../../assets/images/btn_pressure_disable.png'); }
+.main-emotion-grid.is-selected input[type="radio"]:not(:checked) + label.sad_defalt      { background-image: url('../../assets/images/btn_sad_disable.png'); }
+
+/* 選中高亮 */
+.main-emotion-grid.is-selected input[type="radio"]:checked + label {
+    transform: scale(1.1);
+}
+.main-emotion-grid.is-selected input[type="radio"]:checked + label.angry_defalt    { background-image: url('../../assets/images/btn_angry_active.png'); }
+.main-emotion-grid.is-selected input[type="radio"]:checked + label.anxiety_defalt  { background-image: url('../../assets/images/btn_anxiety_active.png'); }
+.main-emotion-grid.is-selected input[type="radio"]:checked + label.calm_defalt     { background-image: url('../../assets/images/btn_calm_active.png'); }
+.main-emotion-grid.is-selected input[type="radio"]:checked + label.joy_defalt      { background-image: url('../../assets/images/btn_joy_active.png'); }
+.main-emotion-grid.is-selected input[type="radio"]:checked + label.pressure_defalt { background-image: url('../../assets/images/btn_pressure_active.png'); }
+.main-emotion-grid.is-selected input[type="radio"]:checked + label.sad_defalt      { background-image: url('../../assets/images/btn_sad_active.png'); }
+
+/* =========================================
+   5. 下一步按鈕
+   ========================================= */
+#next-step-btn {
+    position: absolute; /* 改為 absolute */
+    /* 使用 % 單位 */
+    right: 6%;
+    bottom: 3%;
+    width: 10%;
+    height: auto;
+    aspect-ratio: 1/1; /* 保持正方形比例，根據實際按鈕圖片調整 */
+    z-index: 1000;
+    display: block;
+    background-image: url('../../assets/images/next/btn_next_default.png'); 
+    background-size: contain; /* 保持圖片比例，不裁切 */
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.2s ease, opacity 0.3s ease;
+    image-rendering: -webkit-optimize-contrast;
+}
+
+#next-step-btn.disabled {
+    background-image: url('../../assets/images/next/btn_next_disable.png');
+    pointer-events: none;
+}
+
+#next-step-btn:hover {
+    background-image: url('../../assets/images/next/btn_next_hover.png');
+    transform: scale(1.05);
+}
+
+#next-step-btn:active {
+    background-image: url('../../assets/images/next/btn_next_active.png');
+    transform: scale(0.95);
+}
+
+/* =========================================
+   6. 響應式調整 (不再需要複雜的媒體查詢，因為使用了固定比例容器)
+   ========================================= */
+/* 僅保留字體大小調整，如果需要 */
+@media screen and (max-width: 1024px) {
+    html {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    html {
+        font-size: 12px;
+    }
+}
