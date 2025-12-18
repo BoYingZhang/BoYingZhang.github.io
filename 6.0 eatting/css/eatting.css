@@ -1,0 +1,58 @@
+/* 圖片按鈕 */
+#imageBtn {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: block;
+  /* 完全移除瀏覽器預設的按壓反應 */
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+#introHint {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+  padding: 0px 0px;
+  border-radius: 10px;
+  font-size: 45px;
+  letter-spacing : 2px;
+  opacity: 1;
+  transition: opacity 1s ease;
+  z-index: 9999;
+  font-family: "Chiron GoRound TC", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500; /* 或改 bold */
+  font-style: normal;
+}
+
+#introHint.hide {
+  opacity: 0;
+}
+
+
+#imageBtn:active {
+  outline: none !important;
+  filter: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  background-color: transparent !important;
+}
+
+
+#imageBtn:focus {
+  outline: none !important;
+}

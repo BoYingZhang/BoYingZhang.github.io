@@ -1,0 +1,409 @@
+/* =========================================
+   0. 全局設定與重置
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    /* Flex 居中佈局，背景色與 Main Dish 一致 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: none;
+    font-family: "Chiron GoRound TC", sans-serif;
+}
+
+/* =========================================
+   0.1 遊戲容器 (核心架構)
+   ========================================= */
+.game-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* 核心：保持 16:9 比例 (1920x1080) */
+    aspect-ratio: 16/9;
+    
+    /* 限制最大寬高，使其不超過屏幕 */
+    max-width: 100vw;
+    max-height: 100vh;
+    
+    margin: auto;
+    overflow: hidden;
+}
+
+/* 針對太寬的屏幕 (比 16:9 寬) */
+@media (min-aspect-ratio: 16/9) {
+    .game-wrapper {
+        width: auto;
+        height: 100vh;
+    }
+}
+
+/* 針對太高的屏幕 (比 16:9 高) */
+@media (max-aspect-ratio: 16/9) {
+    .game-wrapper {
+        width: 100vw;
+        height: auto;
+    }
+}
+
+/* =========================================
+   1. 背景設定
+   ========================================= */
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.background-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 填滿容器 */
+    object-position: center;
+    image-rendering: -webkit-optimize-contrast; /* 優化畫質 */
+}
+
+/* =========================================
+   2. 按鈕容器與通用樣式
+   ========================================= */
+.buttons-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* 讓容器不阻擋點擊，只有按鈕可點 */
+    z-index: 10;
+}
+
+.emotion-btn {
+    position: absolute;
+    pointer-events: auto; /* 恢復按鈕可點擊 */
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+    
+    /* 設定按鈕的寬度基準 (假設原始寬度約為 200px~250px 左右)
+       這裡設定為 13% (相對於 1920 寬度)，可根據實際圖片大小調整
+    */
+    width: 22%; 
+    height: auto;
+    
+    transition: transform 0.3s ease;
+    z-index: 2;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 圖片狀態管理 */
+.emotion-btn img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;      /* 關鍵：圖片隨按鈕容器縮放 */
+    height: auto;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    image-rendering: -webkit-optimize-contrast;
+}
+
+/* 預設顯示 default 狀態 */
+.emotion-btn .default-state {
+    opacity: 1;
+}
+
+/* =========================================
+   3. 各別情緒按鈕位置 (Px 轉 %)
+   ========================================= */
+/* 計算邏輯 (假設原稿 Canvas 為 1920x1080):
+   Top % = (原 px / 1080) * 100
+   Left % = (原 px / 1920) * 100
+*/
+
+/* 期待 (原: top 60, left 280) */
+.emotion-btn.expect {
+    top: 6%;
+    left: 14.5%;
+}
+
+/* 失望 (原: top 60, left 750) */
+.emotion-btn.disappoint {
+    top: 6%;
+    left: 39%;
+}
+
+/* 感謝 (原: top 70, left 1220) */
+.emotion-btn.thankful {
+    top: 6%;
+    left: 63.5%;
+}
+
+/* 躁 (原: top 240, left 145) */
+.emotion-btn.irritable {
+    top: 22%;
+    left: 7.5%;
+}
+
+/* 不安 (原: top 240, left 725) */
+.emotion-btn.worried {
+    top: 22%;
+    left: 37.7%;
+}
+
+/* 孤單 (原: top 250, left 1260) */
+.emotion-btn.lonely {
+    top: 22%;
+    left: 65.6%;
+}
+
+/* 滿足 (原: top 420, left 15) */
+.emotion-btn.satisfy {
+    top: 39%;
+    left: 0.8%;
+}
+
+/* 疲累 (原: top 420, left 690) */
+.emotion-btn.tired {
+    top: 39.5%;
+    left: 35.9%;
+}
+
+/* 自在 (原: top 420, left 1275) */
+.emotion-btn.free {
+    top: 39%;
+    left: 66.4%;
+}
+
+/* =========================================
+   4. 交互狀態 (Hover / Active / Disable)
+   ========================================= */
+
+/* Hover 狀態 */
+.emotion-btn:hover:not(.active):not(.disable) .default-state {
+    opacity: 0;
+}
+
+.emotion-btn:hover:not(.active):not(.disable) .hover-state {
+    opacity: 1;
+}
+
+.emotion-btn:hover:not(.active):not(.disable) {
+    transform: scale(1.1); /* 稍微放大 */
+    z-index: 3;
+}
+
+/* Active (選中) 狀態 */
+.emotion-btn.active .default-state,
+.emotion-btn.active .hover-state,
+.emotion-btn.active .disable-state {
+    opacity: 0;
+}
+
+.emotion-btn.active .active-state {
+    opacity: 1;
+}
+
+.emotion-btn.active {
+    z-index: 4;
+    transform: scale(0.95);
+}
+
+/* Disable 狀態 */
+.emotion-btn.disable .default-state,
+.emotion-btn.disable .hover-state,
+.emotion-btn.disable .active-state {
+    opacity: 0;
+}
+
+.emotion-btn.disable .disable-state {
+    opacity: 0.6;
+}
+
+.emotion-btn.disable {
+    cursor: not-allowed;
+    z-index: 1;
+}
+
+/* 當已選擇2個時的特殊效果 (容器層級) */
+.emotion-container.max-selected .emotion-btn:not(.active) {
+    filter: grayscale(50%);
+    opacity: 0.8;
+}
+
+/* =========================================
+   5. 提示 Tooltip
+   ========================================= */
+.emotion-btn.active:hover::after {
+    content: '點擊取消';
+    position: absolute;
+    /* 調整 tooltip 位置，確保不被裁切 */
+    bottom: -30%; 
+    left: 50%;
+    transform: translateX(-50%);
+    
+    background: rgba(255, 255, 255, 0.9);
+    color: rgb(60, 60, 60);
+    padding: 0.4em 0.8em;
+    border-radius: 20px;
+    font-size: 0.8rem; /* 使用 rem 確保可讀性 */
+    white-space: nowrap;
+    z-index: 5;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    pointer-events: none;
+}
+
+/* =========================================
+   6. 對話框 (Dialogue)
+   ========================================= */
+.dialogue {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* 使用 % 單位 (相對於容器) */
+    width: 70%; 
+    max-width: 90%;
+    height: auto;
+    /* 保持圖片原始寬高比 */
+    aspect-ratio: auto;
+    object-fit: contain;
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+    z-index: 20;
+    pointer-events: none;
+}
+
+/* 對話框顯示時 */
+.dialogue.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* =========================================
+   7. RWD 字體調整
+   ========================================= */
+@media screen and (max-width: 1024px) {
+    html {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    html {
+        font-size: 12px;
+    }
+}
+
+/* =========================================
+   8. 下一步按鈕
+   ========================================= */
+.next-btn {
+    position: absolute;
+    right: 6%;
+    bottom: 3%;
+    width: 10%;
+    height: auto;
+    aspect-ratio: 1/1;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: none;
+    cursor: not-allowed; /* 初始狀態為 disable */
+    pointer-events: auto;
+    transition: transform 0.2s ease;
+    overflow: hidden;
+}
+
+/* 按鈕內的所有圖片 */
+.next-btn img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: opacity 0.3s ease;
+    image-rendering: -webkit-optimize-contrast;
+}
+
+/* 初始狀態：顯示 disable 圖片 */
+.next-btn:disabled .disable-state {
+    opacity: 1;
+}
+
+.next-btn:disabled .default-state,
+.next-btn:disabled .hover-state,
+.next-btn:disabled .active-state {
+    opacity: 0;
+}
+
+/* 啟用狀態：顯示 default 圖片 */
+.next-btn:not(:disabled) .default-state {
+    opacity: 1;
+}
+
+.next-btn:not(:disabled) .disable-state,
+.next-btn:not(:disabled) .hover-state,
+.next-btn:not(:disabled) .active-state {
+    opacity: 0;
+}
+
+/* Hover 狀態（只在啟用時生效） */
+.next-btn:not(:disabled):hover .default-state {
+    opacity: 0;
+}
+
+.next-btn:not(:disabled):hover .hover-state {
+    opacity: 1;
+}
+
+.next-btn:not(:disabled):hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+/* Active 狀態（點擊時） */
+.next-btn:not(:disabled):active .default-state,
+.next-btn:not(:disabled):active .hover-state,
+.next-btn:not(:disabled):active .disable-state {
+    opacity: 0;
+}
+
+.next-btn:not(:disabled):active .active-state {
+    opacity: 1;
+}
+
+.next-btn:not(:disabled):active {
+    transform: scale(0.95);
+}
+
+/* 啟用狀態的基本樣式 */
+.next-btn:not(:disabled) {
+    cursor: pointer;
+}
+
+/* RWD 調整 */
+@media screen and (max-width: 768px) {
+    .next-btn {
+        width: 20%;
+        bottom: 3%;
+        right: 3%;
+    }
+}

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMOGURGER</title>
+    <!--css-->
+
+    <link href="./css/main dish.css" rel="stylesheet" />
+    <!--字體-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@200..900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="game-wrapper">
+     <!-- 背景圖 -->
+       <div class="background"></div>
+
+    <!-- 對話框 -->
+    <div class="dialog-container">
+        <img src="../2.0 main dish/img/dialogue/dialogue main-1.png" class="dialogue dialogue-1 show" alt="對話框1">
+        <img src="../2.0 main dish/img/dialogue/dialogue main-2.png" class="dialogue dialogue-2" alt="對話框2">
+    </div>
+       
+    <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // --- 對話框輪播邏輯 ---
+        const dialogue1 = document.querySelector('.dialogue-1');
+        const dialogue2 = document.querySelector('.dialogue-2');
+        let isDialogue1Active = true;
+
+        setInterval(() => {
+            if (isDialogue1Active) {
+                dialogue1.classList.remove('show');
+                dialogue2.classList.add('show');
+                isDialogue1Active = false;
+            } else {
+                dialogue2.classList.remove('show');
+                dialogue1.classList.add('show');
+                isDialogue1Active = true;
+            }
+        }, 3000);
+
+        // --- A. 情緒選項的點擊邏輯 ---
+        const emotionGrid = document.querySelector('.main-emotion-grid');
+        const radioButtons = document.querySelectorAll('input[name="emotion"]');
+        let lastCheckedRadio = null; 
+
+        // 狀態同步函數：控制 CSS Class 的新增與移除
+        function updateEmotionGridState() {
+             let isAnyChecked = document.querySelector('input[name="emotion"]:checked');
+             if (isAnyChecked) {
+                 emotionGrid.classList.add('is-selected');
+             } else {
+                 emotionGrid.classList.remove('is-selected');
+             }
+        }
+
+        // 監聽所有 radio button 的點擊事件
+        radioButtons.forEach(radio => {
+            radio.addEventListener('click', function(e) {
+                
+                // 檢查是否為二次點擊 (取消選中)
+                if (this === lastCheckedRadio) {
+                    setTimeout(() => {
+                        this.checked = false; 
+                        lastCheckedRadio = null; 
+                        updateEmotionGridState(); // 更新狀態
+                    }, 0); 
+                    
+                } else {
+                    // 點擊新的選項
+                    lastCheckedRadio = this;
+                    // change 事件會處理 is-selected 的添加
+                }
+            });
+            // 確保當選中狀態改變時，is-selected class 會被同步更新
+            radio.addEventListener('change', updateEmotionGridState);
+        });
+
+        // 初始化處理
+        updateEmotionGridState();
+        lastCheckedRadio = document.querySelector('input[name="emotion"]:checked');
+
+    });
+</script>
+    <!--選項-->
+    <div class="main-emotion-grid">
+
+    <div class="emotion-option">
+        <input type="radio" id="calm" name="emotion" value="calm">
+        <label for="calm" class="calm_defalt"></label>
+    </div>
+
+    <div class="emotion-option">
+        <input type="radio" id="angry" name="emotion" value="angry">
+        <label for="angry" class="angry_defalt"></label>
+    </div>
+
+    <div class="emotion-option">
+        <input type="radio" id="sad" name="emotion" value="sad">
+        <label for="sad" class="sad_defalt"></label>
+    </div>
+
+    <div class="emotion-option">
+        <input type="radio" id="anxiety" name="emotion" value="anxiety">
+        <label for="anxiety" class="anxiety_defalt"></label>
+    </div>
+
+    <div class="emotion-option">
+        <input type="radio" id="pressure" name="emotion" value="pressure">
+        <label for="pressure" class="pressure_defalt"></label>
+    </div>
+
+    <div class="emotion-option">
+        <input type="radio" id="joy" name="emotion" value="joy">
+        <label for="joy" class="joy_defalt"></label>
+    </div>
+ 
+</div>
+
+<a href="../3.0 side dish/side dish.html" id="next-step-btn"></a>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // 1. 獲取主要元素
+        const emotionGrid = document.querySelector('.main-emotion-grid');
+        const radioButtons = document.querySelectorAll('input[name="emotion"]');
+
+        // 設置一個變數來暫存上一次被選中的選項
+        let lastCheckedRadio = null; 
+
+        // 2. 核心邏輯：監聽所有 radio button 的點擊事件
+        radioButtons.forEach(radio => {
+            
+            // 監聽點擊事件 (比 change 事件更早觸發)
+            radio.addEventListener('click', function(e) {
+                
+                // 檢查點擊當下，這個選項是否和上一個被選中的選項一樣
+                if (this === lastCheckedRadio) {
+                    // 如果一樣，表示用戶正在嘗試取消選擇 (二次點擊)
+                    
+                    // 使用 setTimeout 確保在瀏覽器內建的選中行為執行後，再強制取消
+                    setTimeout(() => {
+                        this.checked = false; 
+                        lastCheckedRadio = null; // 清空暫存
+                        
+                        // 更新 CSS 狀態：移除 is-selected class，回到 default 圖片狀態
+                        updateEmotionGridState();
+                    }, 0); 
+                    
+                } else {
+                    // 點擊的是新的選項 (或從未選中狀態點擊第一個)
+                    // 更新暫存，並確保狀態 Class 被添加
+                    lastCheckedRadio = this;
+                    updateEmotionGridState();
+                }
+            });
+        });
+
+        // 3. 狀態同步函數：控制 CSS Class 的新增與移除
+        function updateEmotionGridState() {
+             let isAnyChecked = document.querySelector('input[name="emotion"]:checked');
+             const nextBtn = document.getElementById('next-step-btn');
+             
+             if (isAnyChecked) {
+                 emotionGrid.classList.add('is-selected');
+                 if (nextBtn) nextBtn.classList.remove('disabled');
+             } else {
+                 emotionGrid.classList.remove('is-selected');
+                 if (nextBtn) nextBtn.classList.add('disabled');
+             }
+        }
+        
+        // 4. 初始化處理
+        updateEmotionGridState();
+        // 設置初始選中項 (用於二次點擊檢查)
+        lastCheckedRadio = document.querySelector('input[name="emotion"]:checked'); 
+    });
+</script>
+
+    <!-- 音樂控制按鈕樣式 -->
+    <style>
+        #music-control-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            border: 2px solid #333;
+            cursor: pointer;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        #music-control-btn:hover {
+            transform: scale(1.1);
+            background: #fff;
+        }
+        #music-control-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #333;
+        }
+        #music-control-btn.muted svg {
+            fill: #999;
+        }
+        #music-control-btn.muted::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: #f00;
+            transform: rotate(45deg);
+            top: 24px;
+            left: 0;
+        }
+    </style>
+
+    <!-- 音樂控制按鈕 -->
+    <div id="music-control-btn" title="開關音樂">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+    </div>
+
+    <!-- 背景音樂 -->
+    <audio id="npc-bgm" loop>
+        <source src="../bgm/others.mp3" type="audio/mp3">
+    </audio>
+    <script>
+        (function() {
+            const audio = document.getElementById('npc-bgm');
+            const btn = document.getElementById('music-control-btn');
+            
+            // 1. 恢復進度
+            const savedTime = sessionStorage.getItem('npc_bgm_time');
+            if (savedTime) {
+                audio.currentTime = parseFloat(savedTime);
+            }
+
+            // 2. 恢復播放狀態 (默認播放)
+            const isPlaying = sessionStorage.getItem('bgm_status') !== 'false';
+            
+            function updateState(playing) {
+                if (playing) {
+                    audio.play().catch(e => {
+                        console.log("Autoplay blocked", e);
+                        updateState(false);
+                    });
+                    btn.classList.remove('muted');
+                } else {
+                    audio.pause();
+                    btn.classList.add('muted');
+                }
+                sessionStorage.setItem('bgm_status', playing);
+            }
+
+            if (isPlaying) {
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(() => updateState(false));
+                }
+                btn.classList.remove('muted');
+            } else {
+                updateState(false);
+            }
+
+            // 3. 點擊事件
+            btn.addEventListener('click', () => {
+                const currentStatus = !audio.paused;
+                updateState(!currentStatus);
+            });
+
+            // 4. 離開頁面保存進度
+            window.addEventListener('beforeunload', () => {
+                sessionStorage.setItem('npc_bgm_time', audio.currentTime);
+            });
+        })();
+    </script>
+</body>
+</html>

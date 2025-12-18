@@ -1,0 +1,243 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* 防止滾動條 */
+    width: 100vw;
+    height: 100vh;
+    /* 新增：Flex 居中佈局，背景色 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: none; 
+}
+
+/*=============================*/
+/*   背景（最底層） z-index:1   */
+/*=============================*/
+.background-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.background-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/*=============================*/
+/*   對話框（背景前一層） z-index:2 */
+/*=============================*/
+
+/* 每張對話框 */
+.dialog-image {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* 使用 % 單位 (相對於容器) */
+    width: 70%; 
+    max-width: 90%;
+    height: auto;
+    /* 保持圖片原始寬高比 */
+    aspect-ratio: auto;
+    object-fit: contain;
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+    pointer-events: none;
+    z-index: 2
+}
+
+/* 目前顯示的那張 */
+.dialog-image.active {
+  opacity: 1;
+}
+
+/*=============================*/
+/*   醬料按鈕層（最上層） z-index:3 */
+/*=============================*/
+.sauce-container {
+  position: absolute;
+  top: 31%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  width: 90%;
+  max-width: 1500px;
+}
+
+/* 醬料按鈕通用樣式 */
+.sauce-btn {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 670px;
+  height: 670px;
+  flex-shrink: 0.5;
+}
+
+.sauce-btn:hover .sauce-image {
+  transform: scale(1.02);
+}
+
+.sauce-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+/* 禁用狀態 */
+.sauce-btn.disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.sauce-btn.disabled:hover .sauce-image {
+  transform: scale(1.02);
+}
+
+/*--------------------------------------*/
+/*   個別 active 樣式 （你的原本設定）   */
+/*--------------------------------------*/
+
+
+.lemon-btn.active {
+  transform: scale(1.7) translateX(-50px) translateY(89px);
+}
+
+.butter-btn.active {
+  transform: scale(1.7) translateX(-70px) translateY(89px);
+}
+
+.chilly-btn.active {
+  transform: scale(1.7) translateX(-70px) translateY(89px);
+}
+
+.honey-btn.active {
+  transform: scale(1.7) translateX(-60px) translateY(89px);
+}
+
+/*   下一步按鈕（最上層） z-index:4 */
+.next-saucebtn {
+    position: absolute;
+    right: 6%;
+    bottom: 3%;
+    width: 10%;
+    height: auto;
+    aspect-ratio: 1/1;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: none;
+    cursor: not-allowed; /* 初始狀態為 disable */
+    pointer-events: auto;
+    transition: transform 0.2s ease, opacity 0.3s ease;
+    overflow: hidden;
+}
+
+/* 禁用狀態 */
+.next-saucebtn.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    pointer-events: auto; /* 保持可觸發事件，但顯示為禁用 */
+}
+
+/* 啟用狀態（default） */
+.next-saucebtn:not(.disabled):not(.active) {
+    cursor: pointer;
+    opacity: 1;
+}
+
+/* hover 效果（只在啟用且非 active 狀態時） */
+.next-saucebtn:not(.disabled):not(.active):hover {
+    transform: scale(1.05);
+}
+
+/* active 狀態 */
+.next-saucebtn.active {
+    cursor: pointer;
+    opacity: 1;
+    transform: scale(0.95); /* 點擊時稍微縮小 */
+}
+
+/* 移除 .nextsauce-image 的 transition，讓 JavaScript 控制 */
+.nextsauce-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* 移除 transition，避免與 CSS hover 衝突 */
+    image-rendering: -webkit-optimize-contrast;
+}
+
+/*=============================*/
+/*   響應式設定（原樣保留） */
+/*=============================*/
+@media (max-width: 1200px) {
+  .sauce-btn {
+    width: 150px;
+    height: 150px;
+  }
+  .sauce-container {
+    gap: 30px;
+  }
+}
+
+@media (max-width: 900px) {
+  .sauce-btn {
+    width: 120px;
+    height: 120px;
+  }
+  .sauce-container {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sauce-container {
+    flex-wrap: wrap;
+    gap: 25px;
+  }
+  .sauce-btn {
+    width: 140px;
+    height: 140px;
+  }
+}
+
+@media (max-width: 600px) {
+  .sauce-container {
+    gap: 15px;
+  }
+  .sauce-btn {
+    width: 110px;
+    height: 110px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sauce-container {
+    gap: 10px;
+  }
+  .sauce-btn {
+    width: 90px;
+    height: 90px;
+  }
+}

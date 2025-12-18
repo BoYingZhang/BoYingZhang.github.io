@@ -1,0 +1,243 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.burger-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* 背景圖 - 填滿整個螢幕 */
+.background-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+/* 食材通用樣式 */
+.ingredient {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%); /* 元素的中心點會對齊到容器中心點 */
+    transition: all 0.8s ease-in-out; /* 定義動畫的加速度曲線 */
+    /* ease-in-out：慢→快→慢 */
+    filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.5));
+}
+
+/* 食材初始位置 (在畫面外) */
+.bread-bottom {
+    left: -20vw;
+    top: 50%;
+    z-index: 2; /* Bread2 - 最底層 */
+}
+
+.meat {
+    left: 120vw;
+    top: -20vh;
+    z-index: 3; /* Meat - 第2層 */
+}
+
+.lettuce {
+    left: -20vw;
+    top: 120vh;
+    z-index: 4; /* Lettuce - 第3層 */
+}
+
+.tomato {
+    left: 120vw;
+    top: 50%;
+    z-index: 5; /* Tomato - 第4層 */
+}
+
+.sauce {
+    left: -20vw;
+    top: -20vh;
+    z-index: 6; /* Sauce - 第5層 */
+}
+
+.bread-top {
+    left: 120vw;
+    top: 120vh;
+    z-index: 7; /* Bread1 - 最上層 */
+}
+
+/* 漢堡組裝完成後的位置 */
+.ingredient.assembled {
+    left: 50%;
+    top: 50%;
+}
+
+/* 漢堡組合後的疊放順序和位置偏移 (從下到上) */
+.bread-bottom.assembled {
+    top: calc(50% + 6vh);
+    z-index: 2; /* 最底層: Bread2 */
+}
+
+.meat.assembled {
+    top: calc(50% + 5vh);
+    z-index: 3; /* 第2層: Meat */
+}
+
+.lettuce.assembled {
+    top: calc(50% + 4vh);
+    z-index: 4; /* 第3層: Lettuce */
+}
+
+.tomato.assembled {
+    top: calc(50% + 3vh);
+    z-index: 5; /* 第4層: Tomato */
+}
+
+.sauce.assembled {
+    top: calc(50% + 2vh);
+    z-index: 6; /* 第5層: Sauce */
+}
+
+.bread-top.assembled {
+    top: calc(50% + 1vh);
+    z-index: 7; /* 最上層: Bread1 */
+}
+
+/* 浮動動畫 */
+@keyframes float {
+    0%, 100% {
+        transform: translate(-50%, -50%) translateY(0px) rotate(0deg);
+    }
+    25% {
+        transform: translate(-50%, -50%) translateY(-15px) rotate(-1deg);
+    }
+    50% {
+        transform: translate(-50%, -50%) translateY(-25px) rotate(0deg);
+    }
+    75% {
+        transform: translate(-50%, -50%) translateY(-15px) rotate(1deg);
+    }
+}
+
+.ingredient.floating {
+    animation: float 4s ease-in-out infinite;
+}
+
+/* 對話框 */
+.dialogue {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    width: 70%; 
+    max-width: 90%;
+    height: auto;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: all 0.5s ease-in-out;
+    z-index: 10;
+    pointer-events: none;
+}
+
+
+/* 對話框顯示時 */
+.dialogue.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* =========================================
+   8. 下一步按鈕
+   ========================================= */
+.next-btn {
+    position: absolute;
+    right: 6%;
+    bottom: 3%;
+    width: 10%;
+    height: auto;
+    aspect-ratio: 1/1;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: none;
+    cursor: not-allowed; /* 初始狀態為 disable */
+    pointer-events: auto;
+    transition: transform 0.2s ease;
+    overflow: hidden;
+}
+
+/* 按鈕內的所有圖片 */
+.next-btn img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: opacity 0.3s ease;
+    image-rendering: -webkit-optimize-contrast;
+}
+
+/* 初始狀態：顯示 disable 圖片 */
+.next-btn:disabled .disable-state {
+    opacity: 1;
+}
+
+.next-btn:disabled .default-state,
+.next-btn:disabled .hover-state,
+.next-btn:disabled .active-state {
+    opacity: 0;
+}
+
+/* 啟用狀態：顯示 default 圖片 */
+.next-btn:not(:disabled) .default-state {
+    opacity: 1;
+}
+
+.next-btn:not(:disabled) .disable-state,
+.next-btn:not(:disabled) .hover-state,
+.next-btn:not(:disabled) .active-state {
+    opacity: 0;
+}
+
+/* Hover 狀態（只在啟用時生效） */
+.next-btn:not(:disabled):hover .default-state {
+    opacity: 0;
+}
+
+.next-btn:not(:disabled):hover .hover-state {
+    opacity: 1;
+}
+
+.next-btn:not(:disabled):hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+/* Active 狀態（點擊時） */
+.next-btn:not(:disabled):active .default-state,
+.next-btn:not(:disabled):active .hover-state,
+.next-btn:not(:disabled):active .disable-state {
+    opacity: 0;
+}
+
+.next-btn:not(:disabled):active .active-state {
+    opacity: 1;
+}
+
+.next-btn:not(:disabled):active {
+    transform: scale(0.95);
+}
+
+/* 啟用狀態的基本樣式 */
+.next-btn:not(:disabled) {
+    cursor: pointer;
+}

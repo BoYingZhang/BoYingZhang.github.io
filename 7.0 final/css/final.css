@@ -1,0 +1,160 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Microsoft JhengHei", sans-serif;
+}
+
+.background {
+  position: fixed; /* 讓背景固定不動 */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("../../6.0 eatting/img/hambergur_eating/8.png");
+  background-size: cover;
+  background-position: center;
+  z-index: -1; /* 放到最底層，內容才不會被擋住 */
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.sentence {
+  font-size: 2.5em;
+  color: darkred;
+  line-height: 1.6;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  font-weight: bold;
+  font-family: "Chiron GoRound TC", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: weight;
+  font-style: normal;
+  margin-top: 80px; /* ← 往下挪 */
+}
+
+.sentence.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.btn {
+  background: linear-gradient(45deg, black);
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  font-size: 1.2em;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 100px;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.time {
+  font-size: 0.8em;
+  color: #888;
+}
+
+.counter {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.animation {
+  display: none; /* 隐藏动画元素，不显示任何内容 */
+}
+
+.animation.fade-out {
+  opacity: 0;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  .sentence {
+    font-size: 1.4em;
+  }
+
+  .btn {
+    padding: 12px 30px;
+    font-size: 1em;
+  }
+}
+
+/* 回首頁按鈕 */
+#homeBtn {
+  display: none; /* 初始隱藏，等句子生成後顯示 */
+}
+
+#homeBtn:hover {
+  transform: translateY(-3px);
+}
+
+#homeBtn:active {
+  transform: translateY(1px);
+}
+
+.homeBtn {
+  position: fixed;
+  right: 2.5vw;
+  bottom: 2.5vw;
+  width: 10vw;
+  height: auto;
+  cursor: pointer;
+  display: none; /* 預設隱藏 */
+  z-index: 1000;
+  transition: transform 0.2s ease, opacity 0.3s ease;
+}
+
+.homeBtn:hover {
+  transform: scale(1.05);
+}
+
+.homeBtn:active {
+  transform: scale(0.95);
+}
+
+.homeBtn img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: all 0.2s ease;
+}
+
+.sentence-box {
+  position: absolute;
+  top: 350px; /* 往下移 */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2; /* 确保在动画元素之上 */
+  width: 100%;
+  text-align: center;
+}
