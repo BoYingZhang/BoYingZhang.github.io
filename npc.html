@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>emo 漢堡店</title>
+    <link rel="stylesheet" href="css/npc.css">
+</head>
+<body>
+    <img src="img/background/background.PNG" alt="背景圖片" class="background-image">
+    
+    <div class="slideshow-container">
+        <div class="slideshow server-slideshow">
+            <div class="slide"><img src="./img/server/server_1.PNG" alt="服務 1"></div>
+            <div class="slide"><img src="./img/server/server_2.PNG" alt="服務 2"></div>
+            <div class="slide"><img src="./img/server/server_3.PNG" alt="服務 3"></div>
+            <div class="slide"><img src="./img/server/server_4.PNG" alt="服務 4"></div>
+            <div class="slide"><img src="./img/server/server_5.PNG" alt="服務 5"></div>
+            <div class="slide"><img src="./img/server/server_6.PNG" alt="服務 6"></div>
+            <div class="slide"><img src="./img/server/server_7.PNG" alt="服務 7"></div>
+            <div class="slide"><img src="./img/server/server_8.PNG" alt="服務 8"></div>
+            <div class="slide"><img src="./img/server/server_9.PNG" alt="服務 9"></div>
+            <div class="slide"><img src="./img/server/server_10.PNG" alt="服務 10"></div>
+            <div class="slide"><img src="./img/server/server_11.PNG" alt="服務 11"></div>
+            <div class="slide"><img src="./img/server/server_12.PNG" alt="服務 12"></div>
+        </div>
+        
+        <div class="slideshow hamburger-slideshow">
+            <div class="slide"><img src="./img/hamburger/hamburger_1.PNG" alt="漢堡 1"></div>
+            <div class="slide"><img src="./img/hamburger/hamburger_2.PNG" alt="漢堡 2"></div>
+            <div class="slide"><img src="./img/hamburger/hamburger_3.PNG" alt="漢堡 3"></div>
+            <div class="slide"><img src="./img/hamburger/hamburger_4.PNG" alt="漢堡 4"></div>
+            <div class="slide"><img src="./img/hamburger/hamburger_5.PNG" alt="漢堡 5"></div>
+            <div class="slide"><img src="./img/hamburger/hamburger_6.PNG" alt="漢堡 6"></div>
+        </div>
+    </div>
+
+    <div class="dialog-container">
+        <div class="dialog-content">
+            <div class="dialog-image-wrapper" id="dialogImageWrapper">
+                <img src="img/dialogue/dialogue_1.png" alt="對話 1" class="dialog-image" id="dialogImage">
+                <!-- 左側點擊區域 -->
+                <div class="click-area left-area" id="prevArea"></div>
+                <!-- 右側點擊區域 -->
+                <div class="click-area right-area" id="nextArea"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="start-btn-container">
+        <a href="../2.0 main dish/main dish.html" id="start-btn"></a>
+    </div>
+
+    <audio id="serverAudio" preload="auto">
+        <source src="audio/server.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="hamburgerAudio" preload="auto">
+        <source src="audio/hamburger.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="js/npc.js"></script>
+</body>
+</html>
