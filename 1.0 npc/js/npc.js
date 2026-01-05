@@ -74,7 +74,7 @@ function initDialogueSystem() {
     
     function updateDialog() {
         // 更新圖片
-        dialogImage.src = `img/dialogue/dialogue_${currentDialog}.PNG`;
+        dialogImage.src = `img/dialogue/dialogue_${currentDialog}.png`;
         dialogImage.alt = `對話 ${currentDialog}`;
         
         // 播放音效
