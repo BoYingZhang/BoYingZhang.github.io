@@ -18,6 +18,7 @@ body {
     background-color: none; 
 }
 
+
 /* =========================================
    0.1 遊戲容器 (新增)
    ========================================= */
@@ -168,12 +169,12 @@ body {
    4. 情緒圖片狀態管理 (保持不變)
    ========================================= */
 /* 預設圖片 */
-.angry_defalt    { background-image: url(../img/btn_angry_defalt.PNG); }
-.anxiety_defalt  { background-image: url(../img/btn_anxiety_defalt.PNG); }
-.calm_defalt     { background-image: url(../img/btn_calm_defalt.PNG); }
-.joy_defalt      { background-image: url(../img/btn_joy_defalt.PNG); }
-.pressure_defalt { background-image: url(../img/btn_pressure_defalt.PNG); }
-.sad_defalt      { background-image: url(../img/btn_sad_defalt.PNG); }
+.angry_defalt    { background-image: url(../img/btn_angry_defalt.png); }
+.anxiety_defalt  { background-image: url(../img/btn_anxiety_defalt.png); }
+.calm_defalt     { background-image: url(../img/btn_calm_defalt.png); }
+.joy_defalt      { background-image: url(../img/btn_joy_defalt.png); }
+.pressure_defalt { background-image: url(../img/btn_pressure_defalt.png); }
+.sad_defalt      { background-image: url(../img/btn_sad_defalt.png); }
 
 /* 懸停圖片 */
 .angry_defalt:hover    { background-image: url(../img/btn_angry_hover.png); }
@@ -227,12 +228,19 @@ body {
     background-position: center;
     transition: transform 0.2s ease, opacity 0.3s ease;
     image-rendering: -webkit-optimize-contrast;
+    opacity: 1;
+    cursor: pointer;
+    transition: opacity 0.3s;
 }
 
 #next-step-btn.disabled {
     background-image: url('../img/next/btn_next_disable.png');
-    pointer-events: none;
+    opacity: 0.3;          /* 變淡，讓使用者知道它還不能按 */
+    pointer-events: none;  /* 禁止滑鼠點擊 */
+    cursor: default;       /* 滑鼠游標變回箭頭 */
+    transition: opacity 0.3s; /* 增加一點淡入淡出的動畫 */
 }
+
 
 #next-step-btn:hover {
     background-image: url('../img/next/btn_next_hover.png');
@@ -243,6 +251,7 @@ body {
     background-image: url('../img/next/btn_next_active.png');
     transform: scale(0.95);
 }
+
 
 /* =========================================
    6. 響應式調整 (不再需要複雜的媒體查詢，因為使用了固定比例容器)
