@@ -237,54 +237,72 @@
         <source src="../bgm/others.mp3" type="audio/mp3">
     </audio>
     <script>
-        (function() {
-            const audio = document.getElementById('npc-bgm');
-            const btn = document.getElementById('music-control-btn');
-            
-            // 1. 恢復進度
-            const savedTime = sessionStorage.getItem('npc_bgm_time');
-            if (savedTime) {
-                audio.currentTime = parseFloat(savedTime);
-            }
-
-            // 2. 恢復播放狀態 (默認播放)
-            const isPlaying = sessionStorage.getItem('bgm_status') !== 'false';
-            
-            function updateState(playing) {
-                if (playing) {
-                    audio.play().catch(e => {
-                        console.log("Autoplay blocked", e);
-                        updateState(false);
-                    });
-                    btn.classList.remove('muted');
-                } else {
-                    audio.pause();
-                    btn.classList.add('muted');
-                }
-                sessionStorage.setItem('bgm_status', playing);
-            }
-
-            if (isPlaying) {
-                const playPromise = audio.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(() => updateState(false));
-                }
-                btn.classList.remove('muted');
+document.addEventListener('DOMContentLoaded', (event) => {
+    // --- 1. 對話框輪播邏輯 ---
+    const dialogue1 = document.querySelector('.dialogue-1');
+    const dialogue2 = document.querySelector('.dialogue-2');
+    
+    // 簡單的輪播檢查，避免報錯
+    if (dialogue1 && dialogue2) {
+        let isDialogue1Active = true;
+        setInterval(() => {
+            if (isDialogue1Active) {
+                dialogue1.classList.remove('show');
+                dialogue2.classList.add('show');
+                isDialogue1Active = false;
             } else {
-                updateState(false);
+                dialogue2.classList.remove('show');
+                dialogue1.classList.add('show');
+                isDialogue1Active = true;
             }
+        }, 3000);
+    }
 
-            // 3. 點擊事件
-            btn.addEventListener('click', () => {
-                const currentStatus = !audio.paused;
-                updateState(!currentStatus);
-            });
+    // --- 2. 情緒選項與按鈕邏輯 (已合併與優化) ---
+    const emotionGrid = document.querySelector('.main-emotion-grid');
+    const radioButtons = document.querySelectorAll('input[name="emotion"]');
+    const nextBtn = document.getElementById('next-step-btn');
+    let lastCheckedRadio = document.querySelector('input[name="emotion"]:checked'); 
 
-            // 4. 離開頁面保存進度
-            window.addEventListener('beforeunload', () => {
-                sessionStorage.setItem('npc_bgm_time', audio.currentTime);
-            });
-        })();
-    </script>
+    // 狀態更新函數
+    function updateState() {
+         let isAnyChecked = document.querySelector('input[name="emotion"]:checked');
+         
+         if (isAnyChecked) {
+             // 有選取時：加上選取樣式，啟用按鈕
+             if (emotionGrid) emotionGrid.classList.add('is-selected');
+             if (nextBtn) nextBtn.classList.remove('disabled');
+         } else {
+             // 沒選取時：移除選取樣式，禁用按鈕
+             if (emotionGrid) emotionGrid.classList.remove('is-selected');
+             if (nextBtn) nextBtn.classList.add('disabled');
+         }
+    }
+
+    // 綁定點擊事件 (處理選取與取消選取)
+    radioButtons.forEach(radio => {
+        radio.addEventListener('click', function(e) {
+            if (this === lastCheckedRadio) {
+                // 二次點擊：取消選取
+                setTimeout(() => {
+                    this.checked = false; 
+                    lastCheckedRadio = null; 
+                    updateState();
+                }, 0); 
+            } else {
+                // 新選取
+                lastCheckedRadio = this;
+                updateState();
+            }
+        });
+    });
+
+    // --- 關鍵修正：初始化 ---
+    // 執行這行會根據當前狀態隱藏或顯示按鈕。
+    // 如果你不希望一開始按鈕就消失，請暫時註解掉下面這一行 updateState();
+    // 但通常邏輯上，沒選情緒就不該出現下一步，所以建議是修改 CSS 的 .disabled 樣式，而不是改這裡。
+    updateState();
+});
+</script>
 </body>
 </html>
